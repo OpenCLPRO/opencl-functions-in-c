@@ -1,5 +1,5 @@
 /*
-Converting floats to int and double using various rounding modes,
+Converting floats and doubles to int and long using various rounding modes,
 like is done in OpenCL.
 See also http://streamcomputing.eu/blog/2014-11-07/opencl-integer-rounding-c/
 
@@ -93,5 +93,74 @@ inline int convert_long_sat_rtn (float number) {
 	return ((long)(saturate_long(number)-0.5f));
 }
 inline int convert_long_sat_rtz (float number) {
+	return ((long)(saturate_long(number)));
+}
+
+// doubles
+
+inline double saturate_int(double number) {
+	if (isnan(number)) return (0.0f); // check if the number was already NaN
+	return (number>INT_MAX ? (double)INT_MAX : number<INT_MIN ? (double)INT_MIN : number);
+}
+inline double saturate_long(double number) {
+	if (isnan(number)) return (0.0f); // check if the number was already NaN
+	return (number>LONG_MAX ? (double)LONG_MAX : number<LONG_MIN ? (double)LONG_MIN : number);
+}
+inline int convert_int_rte (double number) {
+	int sign = (int)((number > 0) - (number < 0));
+	int odd = ((int)number % 2); // odd -> 1, even -> 0
+	return ((int)(number-sign*(0.5f-odd)));
+}
+inline int convert_int_rtp (double number) {
+	return ((int)(number+0.5f));
+}
+inline int convert_int_rtn (double number) {
+	return ((int)(number-0.5f));
+}
+inline int convert_int_rtz (double number) {
+	return ((int)(number));
+}
+inline int convert_long_rte (double number) {
+	int sign = (long)((number > 0) - (number < 0));
+	int odd = ((long)number % 2); // odd -> 1, even -> 0
+	return ((long)(number-sign*(0.5f-odd)));
+}
+inline int convert_long_rtp (double number) {
+	return ((long)(number+0.5f));
+}
+inline int convert_long_rtn (double number) {
+	return ((long)(number-0.5f));
+}
+inline int convert_long_rtz (double number) {
+	return ((long)(number));
+}
+inline int convert_int_sat_rte (double number) {
+	number = saturate_int(number);
+	int sign = (int)((number > 0) - (number < 0));
+	int odd = ((int)number % 2); // odd -> 1, even -> 0
+	return ((int)(number-sign*(0.5f-odd)));
+}
+inline int convert_int_sat_rtp (double number) {
+	return ((int)(saturate_int(number)+0.5f));
+}
+inline int convert_int_sat_rtn (double number) {
+	return ((int)(saturate_int(number)-0.5f));
+}
+inline int convert_int_sat_rtz (double number) {
+	return ((int)(saturate_int(number)));
+}
+inline int convert_long_sat_rte (double number) {
+	number = saturate_long(number);
+	int sign = (int)((number > 0) - (number < 0));
+	int odd = ((int)number % 2); // odd -> 1, even -> 0
+	return ((int)(number-sign*(0.5f-odd)));
+}
+inline int convert_long_sat_rtp (double number) {
+	return ((long)(saturate_long(number)+0.5f));
+}
+inline int convert_long_sat_rtn (double number) {
+	return ((long)(saturate_long(number)-0.5f));
+}
+inline int convert_long_sat_rtz (double number) {
 	return ((long)(saturate_long(number)));
 }
